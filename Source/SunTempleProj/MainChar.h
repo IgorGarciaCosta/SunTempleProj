@@ -21,6 +21,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float baseTurnRate = 65.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float baseLookUpRate = 65.f;
+
 
 
 protected:
@@ -34,4 +40,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	void MoveForward(float value);
+	void MoveRight(float value);
+	void Jump();
+	void StopJumping();
+
+	void TurnAtRate(float rate);
+	void LookUpAtRate(float rate);
+
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const{ return FollowCamera; }
 };
