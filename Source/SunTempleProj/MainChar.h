@@ -43,8 +43,6 @@ public:
 
 	void MoveForward(float value);
 	void MoveRight(float value);
-	void Jump();
-	void StopJumping();
 
 	void TurnAtRate(float rate);
 	void LookUpAtRate(float rate);

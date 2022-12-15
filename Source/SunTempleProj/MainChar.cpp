@@ -65,8 +65,8 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AMainChar::LookUpAtRate);*/
 
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this,  &AMainChar::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMainChar::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this,  &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 
 }
@@ -93,14 +93,6 @@ void AMainChar::MoveRight(float value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetScaledAxis(EAxis::Y);
 		AddMovementInput(Direction, value);
 	}
-}
-
-void AMainChar::Jump()
-{
-}
-
-void AMainChar::StopJumping()
-{
 }
 
 void AMainChar::TurnAtRate(float rate)
