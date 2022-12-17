@@ -32,7 +32,12 @@ public:
 
 	FTimerHandle SwitchHandle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Floor Switch")
+	float SwitchTime = 2.f;
+
 	void CloseDoor();
+
+	void OpenDoor();
 
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
