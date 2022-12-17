@@ -24,6 +24,36 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Floor Switch")
 	class UStaticMeshComponent* Door;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Floor Switch")
+	FVector InitialDoorLoc;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Floor Switch")
+	FVector InitialSwitchLoc;
+
+	FTimerHandle SwitchHandle;
+
+	void CloseDoor();
+
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
+	void RaiseDoor();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
+	void LowerDoor();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
+		void RaiseFloorSwitch();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
+		void LowerFloorSwitch();
+
+	UFUNCTION(BlueprintCallable, Category = "Floor Switch")
+	void UpdateDoorLocation(float Z);
+
+	UFUNCTION(BlueprintCallable, Category = "Floor Switch")
+	void UpdateFloorSwitchLocation(float Z);
+
+
 
 
 protected:
