@@ -3,6 +3,11 @@
 
 #include "Item.h"
 #include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AItem::AItem()
@@ -13,7 +18,11 @@ AItem::AItem()
 	CollisionVolume = CreateDefaultSubobject<USphereComponent>("CollisionVolume");
 	RootComponent = CollisionVolume;
 
-	
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Mesh->SetupAttachment(GetRootComponent());
+
+	IdleParticlesComponent = CreateDefaultSubobject<UParticleSystemComponent>("IdleParticlesComponent");
+	IdleParticlesComponent->SetupAttachment(GetRootComponent());
 
 }
 
@@ -36,10 +45,18 @@ void AItem::Tick(float DeltaTime)
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("begin"));
+	if (IsValid(OverlapParticles)) {
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.f), true);
+	}
+	if (OverlapSound) {
+		UGameplayStatics::PlaySound2D(this, OverlapSound);
+	}
+	Destroy();
 }
 
 void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("end"));
+	
 }
 

@@ -18,6 +18,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Item | Collision")
 	class USphereComponent* CollisionVolume;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Item | mesh")
+	class UStaticMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | particles")
+	class UParticleSystemComponent* IdleParticlesComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | particles")
+	class UParticleSystem* OverlapParticles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | sounds")
+		class USoundCue* OverlapSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
