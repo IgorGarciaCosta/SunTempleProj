@@ -36,6 +36,26 @@ AMainChar::AMainChar()
 
 }
 
+void AMainChar::DecrementHealth(float amount)
+{
+
+	if ((health - amount) >= 15.f) {
+		health -= amount;
+	}
+	else Die();
+
+}
+
+void AMainChar::IncrementCoins(int32 amount)
+{
+	coins += amount;
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), coins);
+}
+
+void AMainChar::Die()
+{
+}
+
 // Called when the game starts or when spawned
 void AMainChar::BeginPlay()
 {
