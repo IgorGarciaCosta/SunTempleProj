@@ -3,12 +3,16 @@
 
 #include "MainAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MainChar.h"
 
 
 void UMainAnimInstance::NativeInitializeAnimation()
 {
 	if (Pawn == nullptr) {
 		Pawn = TryGetPawnOwner();
+		if (IsValid(Pawn)) {
+			MainChar = Cast<AMainChar>(Pawn);
+		}
 	}
 
 
@@ -26,5 +30,9 @@ void UMainAnimInstance::UpdateAnimProperties()
 		MoveSpeed = LateralSpeed.Size();
 
 		bIsInAir = Pawn->GetMovementComponent()->IsFalling();
+
+		if (!IsValid(MainChar)) {
+			MainChar = Cast<AMainChar>(Pawn);
+		}
 	}
 }

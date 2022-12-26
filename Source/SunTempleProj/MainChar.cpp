@@ -36,6 +36,33 @@ AMainChar::AMainChar()
 
 }
 
+void AMainChar::SetMovementStatus(EMovementStatus status)
+{
+	MovementStatus = status;
+
+	if (MovementStatus == EMovementStatus::EMS_Sprinting) {
+		GetCharacterMovement()->MaxWalkSpeed = sprintingSpeed;
+	}
+
+	else {
+		GetCharacterMovement()->MaxWalkSpeed = runningSpeed;
+	}
+}
+
+void AMainChar::ShiftKeyDown()
+{
+	bShiftKeyDown = true;
+	SetMovementStatus(EMovementStatus::EMS_Sprinting);
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), bShiftKeyDown ? TEXT("true") : TEXT("false"));
+}
+
+void AMainChar::ShiftKeyUp()
+{
+	bShiftKeyDown = false;
+	SetMovementStatus(EMovementStatus::EMS_Normal);
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), bShiftKeyDown ? TEXT("true") : TEXT("false"));
+}
+
 void AMainChar::DecrementHealth(float amount)
 {
 
@@ -87,6 +114,9 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this,  &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMainChar::ShiftKeyDown);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMainChar::ShiftKeyUp);
 
 
 }
