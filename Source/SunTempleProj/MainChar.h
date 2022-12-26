@@ -29,6 +29,23 @@ public:
 
 
 
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Player stats")
+	float health = 90.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player stats")
+	float maxHealth = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player stats")
+	float stamina = 120.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player stats")
+	float maxStamina = 350.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player stats")
+	int32 coins = 0;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
