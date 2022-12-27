@@ -15,6 +15,16 @@ enum class EMovementStatus : uint8 {
 	EMS_MAX UMETA(DisplayName = "DefaultMAX"),
 };
 
+UENUM(BlueprintType)
+enum class EStaminaStatus :uint8 {
+	ESS_Normal UMETA(DisplayName = "Normal"),
+	ESS_BelowMinimum UMETA(DisplayName = "BelowMinimum"),
+	ESS_Exausted UMETA(DisplayName = "Exausted"),
+	ESS_ExaustedRecovering UMETA(DisplayName = "ExaustedRecovering"),
+
+	ESS_MAX UMETA(DisplayName = "DefaultMax"),
+};
+
 UCLASS()
 class SUNTEMPLEPROJ_API AMainChar : public ACharacter
 {
@@ -24,8 +34,13 @@ public:
 	// Sets default values for this character's properties
 	AMainChar();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enums")
-	EMovementStatus MovementStatus;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enums")
+	EMovementStatus MovementStatus = EMovementStatus::EMS_Normal;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EStaminaStatus StaminaStatus = EStaminaStatus::ESS_Normal;
+
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus status) { StaminaStatus = status; }
 
 	void SetMovementStatus(EMovementStatus status);
 
@@ -36,6 +51,12 @@ public:
 	float sprintingSpeed = 950.f;
 
 	bool bShiftKeyDown = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	float StaminaDrainRate = 25.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MinSprintStamina = 50.f;
 
 	void ShiftKeyDown();
 	void ShiftKeyUp();
