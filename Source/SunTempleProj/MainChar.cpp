@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AMainChar::AMainChar()
@@ -33,6 +34,15 @@ AMainChar::AMainChar()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);//how fast will rotate in each axis
 	GetCharacterMovement()->JumpZVelocity = 650.f;
 	GetCharacterMovement()->AirControl = 0.2f;
+
+}
+
+void AMainChar::ShowPickUpLocations()
+{
+
+	for (FVector Location : PickupLocations) {
+		UKismetSystemLibrary::DrawDebugSphere(this, Location, 25.f, 12, FLinearColor::Blue, 15.f, .5f);
+	}
 
 }
 
@@ -87,6 +97,8 @@ void AMainChar::Die()
 void AMainChar::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation()+FVector(0, 0, 75.f), 25.f, 12, FLinearColor::Blue, 5.f, 2.f);
 	
 }
 
