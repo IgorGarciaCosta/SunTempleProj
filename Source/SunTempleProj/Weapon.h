@@ -17,7 +17,14 @@ class SUNTEMPLEPROJ_API AWeapon : public AItem
 	
 
 public:
+
 	AWeapon();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Particles")
+	bool bWeaponParticles = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Sound")
+	class USoundCue* OnEquippedSound;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="SkeletalMesh")
 	class USkeletalMeshComponent* SkeletalMesh;

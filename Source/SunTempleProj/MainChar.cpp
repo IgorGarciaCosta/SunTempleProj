@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Weapon.h"
 
 // Sets default values
 AMainChar::AMainChar()
@@ -215,6 +216,9 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMainChar::ShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMainChar::ShiftKeyUp);
 
+	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AMainChar::LMBDown);
+	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AMainChar::LMBUp);
+
 
 }
 
@@ -251,5 +255,23 @@ void AMainChar::LookUpAtRate(float rate)
 {
 	AddControllerPitchInput(rate * baseLookUpRate * GetWorld()->GetDeltaSeconds());
 
+}
+
+void AMainChar::LMBDown()
+{
+	bLMBDown = true;
+
+	if (IsValid(ActiveOverlappingItem)) {
+		AWeapon* weapon = Cast<AWeapon>(ActiveOverlappingItem);
+		if (IsValid(weapon)) {
+			weapon->Equip(this);
+			SetActiveOverlappingItem(nullptr);//to allow getting other weapons
+		}
+	}
+}
+
+void AMainChar::LMBUp()
+{
+	bLMBDown = false;
 }
 
