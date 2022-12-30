@@ -15,6 +15,7 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 		AMainChar* charRef = Cast<AMainChar>(OtherActor);
 		if (IsValid(charRef)) {
 			charRef->DecrementHealth(Damage);
+			Destroy();
 		}
 	}
 }
