@@ -265,7 +265,7 @@ void AMainChar::LMBDown()
 		AWeapon* weapon = Cast<AWeapon>(ActiveOverlappingItem);
 		if (IsValid(weapon)) {
 			weapon->Equip(this);
-			SetActiveOverlappingItem(nullptr);//to allow getting other weapons
+			//SetActiveOverlappingItem(nullptr);//to allow getting other weapons
 		}
 	}
 }
@@ -273,5 +273,13 @@ void AMainChar::LMBDown()
 void AMainChar::LMBUp()
 {
 	bLMBDown = false;
+}
+
+void AMainChar::SetEquippedWeapon(AWeapon* WeaponToSet)
+{
+	if (IsValid(EquippedWeapon)) {
+		EquippedWeapon->Destroy();
+	}
+	EquippedWeapon = WeaponToSet;
 }
 
