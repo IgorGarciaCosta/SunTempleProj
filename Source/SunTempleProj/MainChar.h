@@ -141,4 +141,11 @@ public:
 	FORCEINLINE void SetActiveOverlappingItem(AItem* Item) { ActiveOverlappingItem = Item; }
 
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Anims")
+		bool bAttacking = false;
+
+	void Attack();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Anims")
+	class UAnimMontage* CombatMontage;
 };

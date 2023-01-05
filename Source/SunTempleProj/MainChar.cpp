@@ -5,8 +5,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Animation/AnimInstance.h"
 #include "Weapon.h"
 
 // Sets default values
@@ -268,6 +270,10 @@ void AMainChar::LMBDown()
 			//SetActiveOverlappingItem(nullptr);//to allow getting other weapons
 		}
 	}
+
+	else if (IsValid(EquippedWeapon)) {
+		Attack();
+	}
 }
 
 void AMainChar::LMBUp()
@@ -281,5 +287,17 @@ void AMainChar::SetEquippedWeapon(AWeapon* WeaponToSet)
 		EquippedWeapon->Destroy();
 	}
 	EquippedWeapon = WeaponToSet;
+}
+
+void AMainChar::Attack()
+{
+	bAttacking = true;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (IsValid(AnimInstance) && IsValid(CombatMontage)) {
+		AnimInstance->Montage_Play(CombatMontage, 1.35f);
+		AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
+	}
 }
 
