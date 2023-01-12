@@ -57,5 +57,14 @@ public:
 	UFUNCTION()
 		void OnCombatOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	//void MoveToTarget(class AMainChar* Target);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	bool bOverlappingCombatSphere = false;
+
+	UFUNCTION(BlueprintCallable)
 	void MoveToTarget(class AMainChar* Target);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	AMainChar* CombatTarget;
 };
