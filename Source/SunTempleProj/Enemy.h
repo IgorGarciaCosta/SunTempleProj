@@ -24,7 +24,7 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Move")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Move")
 	EEnemyMovementStatus EnemyMovementStatus;
 
 	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus status) { EnemyMovementStatus = status; }
@@ -36,6 +36,16 @@ public:
 		class USphereComponent* CombatSphere;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
 		class AAIController* AIController;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	float Health = 75.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	float MaxHealth = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	float Damage = 10.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		class UParticleSystem* HitParticle;
 
 protected:
 	// Called when the game starts or when spawned

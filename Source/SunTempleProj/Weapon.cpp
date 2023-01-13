@@ -4,7 +4,9 @@
 #include "Weapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "MainChar.h"
+#include "Enemy.h"
 #include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Sound/SoundCue.h"
@@ -16,6 +18,16 @@ AWeapon::AWeapon()
 	SkeletalMesh->SetupAttachment(GetRootComponent());
 
 	CollisionVolume->SetSphereRadius(100.f);
+
+	CombatCollision = CreateDefaultSubobject<UBoxComponent>("CombatCollision");
+	CombatCollision->SetupAttachment(GetRootComponent());
+}
+
+void AWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+	CombatCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::CombatOnOverlapBegin);
+	CombatCollision->OnComponentEndOverlap.AddDynamic(this, &AWeapon::CombatOnOverlapEnd);
 }
 
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -67,4 +79,22 @@ void AWeapon::Equip(AMainChar* Char)
 		}
 
 	}
+}
+
+void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (IsValid(OtherActor)) {
+		AEnemy* touchedEnemy = Cast<AEnemy>(OtherActor);
+		if (IsValid(touchedEnemy)) {
+			if (IsValid(touchedEnemy->HitParticle)) {
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), touchedEnemy->HitParticle, touchedEnemy->GetTransform(), false);
+			}
+
+		}
+	}
+	
+}
+
+void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
 }
