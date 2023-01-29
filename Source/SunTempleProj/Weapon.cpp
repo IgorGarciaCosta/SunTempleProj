@@ -21,6 +21,11 @@ AWeapon::AWeapon()
 
 	CombatCollision = CreateDefaultSubobject<UBoxComponent>("CombatCollision");
 	CombatCollision->SetupAttachment(GetRootComponent());
+
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CombatCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	CombatCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	CombatCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 void AWeapon::BeginPlay()
@@ -97,4 +102,16 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 
 void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+}
+
+void AWeapon::ActivateCollision()
+{
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+}
+
+void AWeapon::EndCollision()
+{
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 }
