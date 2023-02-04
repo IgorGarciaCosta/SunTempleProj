@@ -24,7 +24,7 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Move")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move")
 	EEnemyMovementStatus EnemyMovementStatus;
 
 	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus status) { EnemyMovementStatus = status; }
@@ -46,6 +46,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 		class UParticleSystem* HitParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		class USoundCue* HitSound;
 
 protected:
 	// Called when the game starts or when spawned

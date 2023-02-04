@@ -8,7 +8,9 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
+#include "Sound/SoundCue.h"
 #include "Weapon.h"
 
 // Sets default values
@@ -297,10 +299,23 @@ void AMainChar::Attack()
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if (IsValid(AnimInstance) && IsValid(CombatMontage)) {
-		AnimInstance->Montage_Play(CombatMontage, 1.35f);
-		AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
+	if (AnimInstance && CombatMontage) {
+		int32 section = FMath::RandRange(0, 1);
+		switch (section) {
+			case 0:
+				AnimInstance->Montage_Play(CombatMontage, 2.2f);
+				AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
+				break;
+
+			case 1:
+				AnimInstance->Montage_Play(CombatMontage, 1.8f);
+				AnimInstance->Montage_JumpToSection(FName("Attack_2"), CombatMontage);
+				break;
+			default:
+				break;
+		}
 	}
+	
 }
 
 void AMainChar::AttackEnd()
@@ -309,5 +324,14 @@ void AMainChar::AttackEnd()
 	if (bLMBDown) {
 		Attack();
 	}
+}
+
+void AMainChar::PlaySwingSound()
+{
+	if (EquippedWeapon->SwingSound) {
+		UGameplayStatics::PlaySound2D(GetWorld(), EquippedWeapon->SwingSound);
+
+	}
+
 }
 

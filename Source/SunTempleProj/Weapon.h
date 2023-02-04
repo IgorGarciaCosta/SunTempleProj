@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Sound")
 	class USoundCue* OnEquippedSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Sound")
+		class USoundCue* SwingSound;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="SkeletalMesh")
 	class USkeletalMeshComponent* SkeletalMesh;
 
@@ -46,6 +49,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
 		float damage = 25.f;
+
+
+
 
 protected:
 	virtual void BeginPlay() override;

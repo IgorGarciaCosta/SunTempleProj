@@ -95,6 +95,10 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), touchedEnemy->HitParticle, touchedEnemy->GetTransform(), false);
 			}
 
+			if (touchedEnemy->HitSound) {
+				UGameplayStatics::PlaySound2D(GetWorld(), touchedEnemy->HitSound);
+			}
+
 		}
 	}
 	
@@ -107,7 +111,6 @@ void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActo
 void AWeapon::ActivateCollision()
 {
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-
 }
 
 void AWeapon::EndCollision()
