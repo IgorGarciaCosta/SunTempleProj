@@ -79,7 +79,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float baseLookUpRate = 65.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		class UParticleSystem* HitParticle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		class USoundCue* HitSound;
 
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Player stats")

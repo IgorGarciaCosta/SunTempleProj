@@ -50,9 +50,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 		class USoundCue* HitSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		class USoundCue* SwingSound;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+		class UBoxComponent* CombatCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	class UAnimMontage* CombatMontage;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+		void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+		void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
 
 public:	
 	// Called every frame
@@ -66,9 +82,9 @@ public:
 	UFUNCTION()
 		void OnAgroOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	UFUNCTION()
-		void OnCombatOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		void OnCombatSphereOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
-		void OnCombatOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		void OnCombatSphereOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	//void MoveToTarget(class AMainChar* Target);
 
@@ -80,4 +96,20 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	AMainChar* CombatTarget;
+
+	UFUNCTION(BlueprintCallable)
+		void ActivateCollision();
+
+	UFUNCTION(BlueprintCallable)
+		void EndCollision();
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bAttacking = false;
+
+	UFUNCTION(BlueprintCallable)
+		void Attack();
+
+	UFUNCTION(BlueprintCallable)
+		void AttackEnd();
 };
