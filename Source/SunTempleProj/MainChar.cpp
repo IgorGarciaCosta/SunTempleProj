@@ -8,9 +8,11 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
 #include "Sound/SoundCue.h"
+#include "Enemy.h"
 #include "Weapon.h"
 
 // Sets default values
@@ -62,6 +64,18 @@ void AMainChar::SetMovementStatus(EMovementStatus status)
 	else {
 		GetCharacterMovement()->MaxWalkSpeed = runningSpeed;
 	}
+}
+
+void AMainChar::SetInterpToEnemy(bool Interp)
+{
+	bInterpEnemy = Interp;
+}
+
+FRotator AMainChar::GetLookAtRotationYaw(FVector Target)
+{
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target);
+	FRotator LookATRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+	return LookAtRotation;
 }
 
 void AMainChar::ShiftKeyDown()
@@ -197,6 +211,14 @@ void AMainChar::Tick(float DeltaTime)
 
 	}
 
+
+	if (bInterpEnemy && CombatTarget) {
+		FRotator lookYaw = GetLookAtRotationYaw(CombatTarget->GetActorLocation());
+		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), lookYaw, DeltaTime, InterpSpeed);
+		
+		SetActorRotation(InterpRotation);
+	
+	}
 }
 
 // Called to bind functionality to input
@@ -296,6 +318,7 @@ void AMainChar::Attack()
 {
 	if (bAttacking == true) return;
 	bAttacking = true;
+	SetInterpToEnemy(true);
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
@@ -321,6 +344,7 @@ void AMainChar::Attack()
 void AMainChar::AttackEnd()
 {
 	bAttacking = false;
+	SetInterpToEnemy(false);
 	if (bLMBDown) {
 		Attack();
 	}
