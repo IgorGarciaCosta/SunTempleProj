@@ -59,6 +59,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	class UAnimMontage* CombatMontage;
 
+	FTimerHandle AttackTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float AttckMinTime = .5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float AttckMaxTime  = 3.5f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -11,6 +11,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundCue.h"
 #include "Animation/AnimInstance.h"
+#include "TimerManager.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -140,6 +141,7 @@ void AEnemy::OnCombatSphereOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 				MoveToTarget(mainChar);
 				CombatTarget = nullptr;
 			}
+			GetWorldTimerManager().ClearTimer(AttackTimer);
 		}
 	}
 }
@@ -204,6 +206,8 @@ void AEnemy::AttackEnd()
 	bAttacking = false;
 
 	if (bOverlappingCombatSphere) {
+		float AttackTime = FMath::FRandRange(AttckMinTime, AttckMaxTime);
+		GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
 		Attack();
 	}
 }
