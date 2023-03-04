@@ -208,7 +208,7 @@ void AEnemy::AttackEnd()
 	if (bOverlappingCombatSphere) {
 		float AttackTime = FMath::FRandRange(AttckMinTime, AttckMaxTime);
 		GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
-		Attack();
+		//Attack();
 	}
 }
 
