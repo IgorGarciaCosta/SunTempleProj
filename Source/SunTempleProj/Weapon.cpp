@@ -63,6 +63,9 @@ void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 void AWeapon::Equip(AMainChar* Char)
 {
 	if (IsValid(Char)) {
+		SetInstigator(Char->GetController());
+
+
 		SkeletalMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 		SkeletalMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 
@@ -98,7 +101,9 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 			if (touchedEnemy->HitSound) {
 				UGameplayStatics::PlaySound2D(GetWorld(), touchedEnemy->HitSound);
 			}
-
+			if (DamageTypeClass) {
+				UGameplayStatics::ApplyDamage(touchedEnemy, Damage, WeaponInstigator, this, DamageTypeClass);
+			}
 		}
 	}
 	
