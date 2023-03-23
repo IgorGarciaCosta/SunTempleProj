@@ -14,6 +14,7 @@
 #include "Sound/SoundCue.h"
 #include "Enemy.h"
 #include "Weapon.h"
+#include "MainPlayerController.h"
 
 // Sets default values
 AMainChar::AMainChar()
@@ -131,7 +132,7 @@ void AMainChar::BeginPlay()
 	Super::BeginPlay();
 
 	//UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation()+FVector(0, 0, 75.f), 25.f, 12, FLinearColor::Blue, 5.f, 2.f);
-	
+	MainPlayerController = Cast< AMainPlayerController>(GetController());
 }
 
 // Called every frame
@@ -230,6 +231,14 @@ void AMainChar::Tick(float DeltaTime)
 		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), lookYaw, DeltaTime, InterpSpeed);
 		
 		SetActorRotation(InterpRotation);
+	
+	}
+
+	if (CombatTarget) {
+		CombatTargetLocation = CombatTarget->GetActorLocation();
+		if (MainPlayerController) {
+			MainPlayerController->EnemyLocation = CombatTargetLocation;
+		}
 	
 	}
 }

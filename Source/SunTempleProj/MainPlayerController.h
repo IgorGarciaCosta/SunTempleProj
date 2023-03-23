@@ -23,11 +23,24 @@ public:
 	//var to hold widget after creating it
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 	UUserWidget* HUDOverlay;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+		TSubclassOf<class UUserWidget> WEnemyHealthBar;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UUserWidget* EnemyHealthBar;
+
+	bool bEnemyHealthBarVisible = false;
+
+	void DisplayEnemyHealthBar();
+
+	void RemoveEnemyHealthBar();
+
+	FVector EnemyLocation;
 
 protected:
 	virtual void BeginPlay() override;
 
-
+	virtual void Tick(float DeltaTime) override;
 	
 };
