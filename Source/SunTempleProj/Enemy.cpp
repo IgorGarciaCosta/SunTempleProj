@@ -113,6 +113,7 @@ void AEnemy::OnAgroOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (IsValid(OtherActor)) {
 		AMainChar* mainChar = Cast<AMainChar>(OtherActor);
 		if (mainChar) {
+			bHasValidTarget = false;
 			if (mainChar->CombatTarget == this) {
 
 				mainChar->SetCombatTarget(nullptr);
@@ -136,6 +137,7 @@ void AEnemy::OnCombatSphereOverlapBegin(UPrimitiveComponent* OverlappedComponent
 	if (IsValid(OtherActor) && Alive()) {
 		AMainChar* mainChar = Cast<AMainChar>(OtherActor);
 		if (mainChar) {
+			bHasValidTarget = true;
 			mainChar->SetCombatTarget(this);
 			mainChar->SetHasCombatTarget(true);
 			if (mainChar->MainPlayerController) {
@@ -206,7 +208,7 @@ void AEnemy::EndCollision()
 
 void AEnemy::Attack()
 {
-	if (!Alive()) return;
+	if (!Alive() || !bHasValidTarget) return;
 	if (IsValid(AIController)) {
 		AIController->StopMovement();
 		//(LogTemp, Warning, TEXT("here"));

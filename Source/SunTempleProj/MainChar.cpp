@@ -105,7 +105,21 @@ void AMainChar::DecrementHealth(float amount)
 
 float AMainChar::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	DecrementHealth(DamageAmount);
+	//DecrementHealth(DamageAmount);
+	if ((health - DamageAmount) >= 15.f) {
+		health -= DamageAmount;
+		
+	}
+	else {
+		if (DamageCauser) {
+			AEnemy* enemy = Cast<AEnemy>(DamageCauser);
+			enemy->bHasValidTarget = false;
+			Die();
+		}
+		
+	}
+		
+		
 
 	return DamageAmount;
 }
@@ -148,6 +162,8 @@ void AMainChar::BeginPlay()
 
 	//UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation()+FVector(0, 0, 75.f), 25.f, 12, FLinearColor::Blue, 5.f, 2.f);
 	MainPlayerController = Cast< AMainPlayerController>(GetController());
+
+	Jump();
 }
 
 // Called every frame

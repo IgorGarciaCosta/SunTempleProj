@@ -24,6 +24,7 @@ class SUNTEMPLEPROJ_API AEnemy : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemy();
+	bool bHasValidTarget = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move")
 	EEnemyMovementStatus EnemyMovementStatus;
