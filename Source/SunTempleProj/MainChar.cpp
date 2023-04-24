@@ -163,7 +163,6 @@ void AMainChar::BeginPlay()
 	//UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation()+FVector(0, 0, 75.f), 25.f, 12, FLinearColor::Blue, 5.f, 2.f);
 	MainPlayerController = Cast< AMainPlayerController>(GetController());
 
-	Jump();
 }
 
 // Called every frame
@@ -185,10 +184,16 @@ void AMainChar::Tick(float DeltaTime)
 			else {
 				stamina -= DeltaStamina;
 			}
-			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+			if (bMovingForward || bMovingRight) {
+				SetMovementStatus(EMovementStatus::EMS_Sprinting);
+			}
+			else {
+				SetMovementStatus(EMovementStatus::EMS_Normal);
+			}
 		}
 
 		else {//shift key up
+			UE_LOG(LogTemp, Warning, TEXT("SK up"));
 			if (stamina + DeltaStamina >= maxStamina) {
 				stamina = maxStamina;
 			}
@@ -209,11 +214,16 @@ void AMainChar::Tick(float DeltaTime)
 			}
 			else {
 				stamina -= DeltaStamina;
-				SetMovementStatus(EMovementStatus::EMS_Sprinting);
+				if (bMovingForward || bMovingRight) {
+					SetMovementStatus(EMovementStatus::EMS_Sprinting);
+				}
+				else {
+					SetMovementStatus(EMovementStatus::EMS_Normal);
+				}
 			}
 		}
 
-		else {
+		else {//shift key up
 			if (stamina + DeltaStamina >= MinSprintStamina) {
 				SetStaminaStatus(EStaminaStatus::ESS_Normal);
 				stamina += DeltaStamina;
@@ -305,8 +315,10 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AMainChar::MoveForward(float value)
 {
+	bMovingForward = false;
 	if ((Controller != nullptr) && (value != 0.0f) && !bAttacking && (MovementStatus!=EMovementStatus::EMS_Dead)) {
 		//find out wich way is forward
+		bMovingForward = true;
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 		
@@ -317,8 +329,10 @@ void AMainChar::MoveForward(float value)
 
 void AMainChar::MoveRight(float value)
 {
+	bMovingRight = false;
 	if ((Controller != nullptr) && (value != 0.0f) && !bAttacking && (MovementStatus != EMovementStatus::EMS_Dead)) {
 		//find out wich way is forward
+		bMovingRight = true;
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 

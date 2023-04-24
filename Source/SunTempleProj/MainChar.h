@@ -159,7 +159,8 @@ public:
 	void TurnAtRate(float rate);
 	void LookUpAtRate(float rate);
 
-
+	bool bMovingForward = false;
+	bool bMovingRight = false;
 	bool bLMBDown;
 	void LMBDown();
 	void LMBUp();
