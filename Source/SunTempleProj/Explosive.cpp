@@ -7,6 +7,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Engine/World.h"
 #include "Sound/SoundCue.h"
+#include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
 
 AExplosive::AExplosive()
 {
@@ -17,7 +19,8 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor,  OtherComp,  OtherBodyIndex,  bFromSweep, SweepResult);
 	if (IsValid(OtherActor)) {
 		AMainChar* charRef = Cast<AMainChar>(OtherActor);
-		if (IsValid(charRef)) {
+		AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+		if (IsValid(charRef) || IsValid(Enemy)) {
 			if (IsValid(OverlapParticles)) {
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.f), true);
 			}
@@ -25,7 +28,8 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 				UGameplayStatics::PlaySound2D(this, OverlapSound);
 			}
 
-			charRef->DecrementHealth(Damage);
+			//charRef->DecrementHealth(Damage);
+			UGameplayStatics::ApplyDamage(OtherActor, Damage, nullptr, this, DamageTypeClass);
 			Destroy();
 		}
 	}

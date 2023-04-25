@@ -25,6 +25,7 @@ AEnemy::AEnemy()
 	AgroSphere = CreateDefaultSubobject<USphereComponent>("AgroSPhere");
 	AgroSphere->SetupAttachment(GetRootComponent());
 	AgroSphere->SetSphereRadius(600.f);
+	AgroSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Ignore);
 
 	CombatSphere = CreateDefaultSubobject<USphereComponent>("CombatSPhere");
 	CombatSphere->SetupAttachment(GetRootComponent());
@@ -146,7 +147,10 @@ void AEnemy::OnCombatSphereOverlapBegin(UPrimitiveComponent* OverlappedComponent
 			
 			CombatTarget = mainChar;
 			bOverlappingCombatSphere = true;
-			Attack();
+
+			float AttackTime = FMath::FRandRange(AttckMinTime, AttckMaxTime);
+			GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
+
 			//SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
 		}
 	}
@@ -161,7 +165,7 @@ void AEnemy::OnCombatSphereOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 			bOverlappingCombatSphere = false;
 			/*SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
 			MoveToTarget(mainChar);*/
-			if (EnemyMovementStatus != EEnemyMovementStatus::EMS_Attacking) {
+			if (EnemyMovementStatus == EEnemyMovementStatus::EMS_Attacking) {
 				MoveToTarget(mainChar);
 				CombatTarget = nullptr;
 			}
