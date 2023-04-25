@@ -31,8 +31,8 @@ AEnemy::AEnemy()
 	CombatSphere->SetSphereRadius(75.f);
 
 	CombatCollision = CreateDefaultSubobject<UBoxComponent>("CombatCollision");
-	CombatCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("EnemySocket"));
-	
+	CombatCollision->SetupAttachment(GetMesh(), FName("EnemySocket"));
+
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CombatCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	CombatCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
