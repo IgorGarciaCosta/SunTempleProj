@@ -193,7 +193,6 @@ void AMainChar::Tick(float DeltaTime)
 		}
 
 		else {//shift key up
-			UE_LOG(LogTemp, Warning, TEXT("SK up"));
 			if (stamina + DeltaStamina >= maxStamina) {
 				stamina = maxStamina;
 			}
@@ -430,5 +429,42 @@ void AMainChar::PlaySwingSound()
 
 	}
 
+}
+
+void AMainChar::UpdateCombatTarget() {
+	TArray<AActor*> OverlappingActors;
+	GetOverlappingActors(OverlappingActors, EnemyFilter);
+
+	if (OverlappingActors.Num() == 0) {
+		if (MainPlayerController) {
+			MainPlayerController->RemoveEnemyHealthBar();
+		}
+		return;
+	}
+
+	AEnemy* closestEnemy = Cast< AEnemy>(OverlappingActors[0]);
+
+	if (IsValid(closestEnemy)) {
+		FVector Loc = GetActorLocation();
+		float MinDist = (closestEnemy->GetActorLocation() - Loc).Size();
+
+		for (auto Actor : OverlappingActors) {
+			AEnemy* Enemy = Cast<AEnemy>(Actor);
+			if (Enemy) {
+				float DistToActor = (Enemy->GetActorLocation()- Loc).Size();
+				if (DistToActor < MinDist) {
+					MinDist = DistToActor;
+					closestEnemy = Enemy;
+				}
+			}
+			
+		}
+		if (MainPlayerController) {
+			MainPlayerController->DisplayEnemyHealthBar();
+		}
+		SetCombatTarget(closestEnemy);
+		bHasCombatTarget = true;
+	}
+	
 }
 
