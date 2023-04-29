@@ -130,6 +130,15 @@ void AMainChar::IncrementCoins(int32 amount)
 	//UE_LOG(LogTemp, Warning, TEXT("%f"), coins);
 }
 
+void AMainChar::IncrementHealth(float amount) {
+	if (health + amount >= maxHealth) {
+		health = maxHealth;
+	}
+	else {
+		health += amount;
+	}
+}
+
 void AMainChar::Die()
 {
 	if (MovementStatus == EMovementStatus::EMS_Dead) return;

@@ -19,6 +19,7 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 		AMainChar* charRef = Cast<AMainChar>(OtherActor);
 		if (IsValid(charRef)) {
 
+			OnPickupBP(charRef);
 			if (IsValid(OverlapParticles)) {
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.f), true);
 			}
@@ -26,7 +27,7 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 				UGameplayStatics::PlaySound2D(this, OverlapSound);
 			}
 
-			charRef->IncrementCoins(coinCount);
+			
 			charRef->PickupLocations.Add(GetActorLocation());
 			Destroy();
 		}
