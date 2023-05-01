@@ -474,6 +474,21 @@ void AMainChar::UpdateCombatTarget() {
 		SetCombatTarget(closestEnemy);
 		bHasCombatTarget = true;
 	}
+
 	
+}
+
+
+void AMainChar::SwitchLevel(FName lvlName) {
+	UWorld* World = GetWorld();
+
+	if (World) {
+		FString CurrLvl = World->GetMapName();
+
+		FName CurrlvlName(*CurrLvl); //D reference operator.
+		if (CurrlvlName != lvlName) {
+			UGameplayStatics::OpenLevel(World, lvlName);
+		}
+	}
 }
 
