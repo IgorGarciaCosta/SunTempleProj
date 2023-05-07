@@ -15,6 +15,7 @@
 #include "Enemy.h"
 #include "Weapon.h"
 #include "MainPlayerController.h"
+#include "FirstSaveGame.h"
 
 // Sets default values
 AMainChar::AMainChar()
@@ -489,6 +490,44 @@ void AMainChar::SwitchLevel(FName lvlName) {
 		if (CurrlvlName != lvlName) {
 			UGameplayStatics::OpenLevel(World, lvlName);
 		}
+	}
+}
+
+void AMainChar::SaveGame() {
+	UFirstSaveGame* SaveGameInstance =Cast<UFirstSaveGame>(UGameplayStatics::CreateSaveGameObject(UFirstSaveGame::StaticClass()));
+
+	if (IsValid(SaveGameInstance)) {
+		SaveGameInstance->CharStats.Health = health;
+		SaveGameInstance->CharStats.MaxHealth = maxHealth;
+		SaveGameInstance->CharStats.Stamina = stamina;
+		SaveGameInstance->CharStats.MaxStamina = maxStamina;
+		SaveGameInstance->CharStats.Coins = coins;
+
+		SaveGameInstance->CharStats.Loc = GetActorLocation();
+		SaveGameInstance->CharStats.Rot = GetActorRotation();
+
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->PlayerName, SaveGameInstance->UserIndex);
+
+	}
+	}
+void AMainChar::LoadGame(bool setPosition) {
+	UFirstSaveGame* LoadGameInstance = Cast<UFirstSaveGame>(UGameplayStatics::CreateSaveGameObject(UFirstSaveGame::StaticClass()));
+
+	if (IsValid(LoadGameInstance)) {
+		LoadGameInstance = Cast<UFirstSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->PlayerName, LoadGameInstance->UserIndex));
+
+		health = LoadGameInstance->CharStats.Health;
+		maxHealth = LoadGameInstance->CharStats.MaxHealth;
+		stamina = LoadGameInstance->CharStats.Stamina;
+		maxStamina = LoadGameInstance->CharStats.MaxStamina;
+		coins = LoadGameInstance->CharStats.Coins;
+
+		if (setPosition) {
+			SetActorLocation(LoadGameInstance->CharStats.Loc);
+			SetActorRotation(LoadGameInstance->CharStats.Rot);
+		}
+
+
 	}
 }
 
