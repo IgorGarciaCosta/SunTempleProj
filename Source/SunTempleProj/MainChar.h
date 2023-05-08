@@ -35,6 +35,9 @@ public:
 	// Sets default values for this character's properties
 	AMainChar();
 
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<class AItemStorage> WeaponStorage;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 		bool bHasCombatTarget = false;
 

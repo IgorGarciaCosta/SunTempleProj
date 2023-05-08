@@ -16,6 +16,7 @@
 #include "Weapon.h"
 #include "MainPlayerController.h"
 #include "FirstSaveGame.h"
+#include "ItemStorage.h"
 
 // Sets default values
 AMainChar::AMainChar()
@@ -506,6 +507,10 @@ void AMainChar::SaveGame() {
 		SaveGameInstance->CharStats.Loc = GetActorLocation();
 		SaveGameInstance->CharStats.Rot = GetActorRotation();
 
+		if (EquippedWeapon) {
+			SaveGameInstance->CharStats.WeaponName = EquippedWeapon->Name;
+		}
+
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->PlayerName, SaveGameInstance->UserIndex);
 
 	}
@@ -521,6 +526,20 @@ void AMainChar::LoadGame(bool setPosition) {
 		stamina = LoadGameInstance->CharStats.Stamina;
 		maxStamina = LoadGameInstance->CharStats.MaxStamina;
 		coins = LoadGameInstance->CharStats.Coins;
+
+		if (WeaponStorage) {
+			AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
+			if (Weapons) {
+				FString WeaponName = LoadGameInstance->CharStats.WeaponName;
+
+				if (Weapons->WeaponMap.Contains(WeaponName)) {
+					AWeapon* WeaponToEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+					WeaponToEquip->Equip(this);
+				}
+
+			}
+		}
+
 
 		if (setPosition) {
 			SetActorLocation(LoadGameInstance->CharStats.Loc);

@@ -29,6 +29,9 @@ public:
 
 	AWeapon();
 
+	UPROPERTY(EditDefaultsOnly)
+		FString Name;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Item")
 	EWeaponState WeaponState = EWeaponState::EWS_Pickup;
 

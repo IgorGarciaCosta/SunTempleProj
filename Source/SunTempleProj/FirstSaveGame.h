@@ -26,6 +26,8 @@ struct FCharacterStats {
 		FVector Loc = FVector();
 	UPROPERTY(VisibleAnywhere)
 		FRotator Rot = FRotator();
+	UPROPERTY(VisibleAnywhere)
+		FString WeaponName = TEXT(" ");
 };
 /**
  * 
