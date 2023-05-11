@@ -28,6 +28,8 @@ void AMainPlayerController::DisplayPauseMenu_Implementation()
 		bPauseMenuVisible = true;
 		PauseMenu->SetVisibility(ESlateVisibility::Visible);
 
+		FInputModeUIOnly InputModeUIOnly;
+		SetInputMode(InputModeUIOnly);
 	}
 }
 
