@@ -45,9 +45,11 @@ public:
 
 	bool bPauseMenuVisible = false;
 
-	void DisplayPauseMenu();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void DisplayPauseMenu();
 
-	void RemovePauseMenu();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void RemovePauseMenu();
 
 	FVector EnemyLocation;
 
