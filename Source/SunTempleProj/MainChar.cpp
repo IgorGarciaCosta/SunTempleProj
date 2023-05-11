@@ -320,6 +320,8 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AMainChar::LMBDown);
 	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AMainChar::LMBUp);
 
+	PlayerInputComponent->BindAction("pauseMenu", IE_Pressed, this, &AMainChar::ESC);
+
 
 }
 
@@ -385,6 +387,20 @@ void AMainChar::LMBDown()
 void AMainChar::LMBUp()
 {
 	bLMBDown = false;
+}
+
+void AMainChar::ESC()
+{
+
+	if(MainPlayerController) {
+		if (bPauseMenuVis) {
+			MainPlayerController->RemovePauseMenu();
+		}
+		else {
+			MainPlayerController->DisplayPauseMenu();
+		}
+		bPauseMenuVis = !bPauseMenuVis;
+	}
 }
 
 void AMainChar::SetEquippedWeapon(AWeapon* WeaponToSet)

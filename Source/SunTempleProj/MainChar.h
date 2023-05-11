@@ -171,6 +171,9 @@ public:
 	void LMBDown();
 	void LMBUp();
 
+	bool bPauseMenuVis = false;
+	void ESC();
+
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const{ return FollowCamera; }
 
