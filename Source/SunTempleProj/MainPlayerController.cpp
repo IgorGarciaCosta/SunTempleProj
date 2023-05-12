@@ -28,8 +28,9 @@ void AMainPlayerController::DisplayPauseMenu_Implementation()
 		bPauseMenuVisible = true;
 		PauseMenu->SetVisibility(ESlateVisibility::Visible);
 
-		FInputModeUIOnly InputModeUIOnly;
+		FInputModeGameAndUI InputModeUIOnly;
 		SetInputMode(InputModeUIOnly);
+		bShowMouseCursor = true;
 	}
 }
 
@@ -38,7 +39,7 @@ void AMainPlayerController::RemovePauseMenu_Implementation()
 	if (PauseMenu) {
 		bPauseMenuVisible = false;
 		PauseMenu->SetVisibility(ESlateVisibility::Hidden);
-
+		bShowMouseCursor = false;
 	}
 }
 
