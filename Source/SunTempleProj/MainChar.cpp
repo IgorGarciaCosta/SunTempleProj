@@ -144,6 +144,7 @@ void AMainChar::IncrementHealth(float amount) {
 void AMainChar::Die()
 {
 	if (MovementStatus == EMovementStatus::EMS_Dead) return;
+	if (MovementStatus == EMovementStatus::EMS_Dead) return;
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	if (AnimInstance && CombatMontage) {
@@ -588,6 +589,9 @@ void AMainChar::LoadGame(bool setPosition) {
 			SetActorRotation(LoadGameInstance->CharStats.Rot);
 		}
 
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		GetMesh()->bPauseAnims = false;
+		GetMesh()->bNoSkeletonUpdate = false;
 
 	}
 }
