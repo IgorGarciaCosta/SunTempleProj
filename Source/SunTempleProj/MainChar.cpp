@@ -155,6 +155,7 @@ void AMainChar::Die()
 }
 
 void AMainChar::Jump() {
+	if (MainPlayerController) if (MainPlayerController->bPauseMenuVisible) return;
 	if (MovementStatus != EMovementStatus::EMS_Dead) {
 		Super::Jump();
 	}
@@ -304,8 +305,8 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainChar::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainChar::MoveRight);
 
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Turn", this, &AMainChar::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &AMainChar::LookUp);
 
 	/*PlayerInputComponent->BindAxis("TurnRate", this, &AMainChar::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AMainChar::LookUpAtRate);*/
@@ -328,7 +329,7 @@ void AMainChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AMainChar::MoveForward(float value)
 {
 	bMovingForward = false;
-	if ((Controller != nullptr) && (value != 0.0f) && !bAttacking && (MovementStatus!=EMovementStatus::EMS_Dead)) {
+	if (CanMove(value)) {
 		//find out wich way is forward
 		bMovingForward = true;
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -342,7 +343,7 @@ void AMainChar::MoveForward(float value)
 void AMainChar::MoveRight(float value)
 {
 	bMovingRight = false;
-	if ((Controller != nullptr) && (value != 0.0f) && !bAttacking && (MovementStatus != EMovementStatus::EMS_Dead)) {
+	if (CanMove(value)) {
 		//find out wich way is forward
 		bMovingRight = true;
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -351,6 +352,29 @@ void AMainChar::MoveRight(float value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetScaledAxis(EAxis::Y);
 		AddMovementInput(Direction, value);
 	}
+}
+
+void AMainChar::Turn(float value)
+{
+	if (CanMove(value)) {
+		AddControllerYawInput(value);
+	}
+}
+
+void AMainChar::LookUp(float value)
+{
+	if (CanMove(value)) {
+		AddControllerPitchInput(value);
+	}
+}
+
+bool AMainChar::CanMove(float value)
+{
+	if (MainPlayerController) {
+		return (value != 0.0f) && !bAttacking && (MovementStatus != EMovementStatus::EMS_Dead) && !MainPlayerController->bPauseMenuVisible;
+	}
+	
+	return false;
 }
 
 void AMainChar::TurnAtRate(float rate)
@@ -370,6 +394,8 @@ void AMainChar::LMBDown()
 	bLMBDown = true;
 
 	if (MovementStatus == EMovementStatus::EMS_Dead) return;
+
+	if (MainPlayerController) if (MainPlayerController->bPauseMenuVisible) return;
 
 	if (IsValid(ActiveOverlappingItem)) {
 		AWeapon* weapon = Cast<AWeapon>(ActiveOverlappingItem);

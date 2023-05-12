@@ -162,6 +162,11 @@ public:
 	void MoveForward(float value);
 	void MoveRight(float value);
 
+	void Turn(float value);
+	void LookUp(float value);
+
+	bool CanMove(float value);
+
 	void TurnAtRate(float rate);
 	void LookUpAtRate(float rate);
 
