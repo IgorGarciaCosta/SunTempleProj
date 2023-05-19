@@ -175,7 +175,7 @@ void AMainChar::BeginPlay()
 
 	//UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation()+FVector(0, 0, 75.f), 25.f, 12, FLinearColor::Blue, 5.f, 2.f);
 	MainPlayerController = Cast< AMainPlayerController>(GetController());
-
+	LoadGameNoSwitch();
 }
 
 // Called every frame
@@ -550,6 +550,11 @@ void AMainChar::SaveGame() {
 		SaveGameInstance->CharStats.Loc = GetActorLocation();
 		SaveGameInstance->CharStats.Rot = GetActorRotation();
 
+		FString MapName = GetWorld()->GetMapName();
+		MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+		SaveGameInstance->CharStats.LvlName = MapName;
+
 		if (EquippedWeapon) {
 			SaveGameInstance->CharStats.WeaponName = EquippedWeapon->Name;
 		}
@@ -588,6 +593,44 @@ void AMainChar::LoadGame(bool setPosition) {
 			SetActorLocation(LoadGameInstance->CharStats.Loc);
 			SetActorRotation(LoadGameInstance->CharStats.Rot);
 		}
+
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		GetMesh()->bPauseAnims = false;
+		GetMesh()->bNoSkeletonUpdate = false;
+
+		if (LoadGameInstance->CharStats.LvlName == TEXT("")) {
+			FName levelName(*LoadGameInstance->CharStats.LvlName);
+			SwitchLevel(levelName);
+		}
+	}
+}
+
+void AMainChar::LoadGameNoSwitch()
+{
+	UFirstSaveGame* LoadGameInstance = Cast<UFirstSaveGame>(UGameplayStatics::CreateSaveGameObject(UFirstSaveGame::StaticClass()));
+
+	if (IsValid(LoadGameInstance)) {
+		LoadGameInstance = Cast<UFirstSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->PlayerName, LoadGameInstance->UserIndex));
+
+		health = LoadGameInstance->CharStats.Health;
+		maxHealth = LoadGameInstance->CharStats.MaxHealth;
+		stamina = LoadGameInstance->CharStats.Stamina;
+		maxStamina = LoadGameInstance->CharStats.MaxStamina;
+		coins = LoadGameInstance->CharStats.Coins;
+
+		if (WeaponStorage) {
+			AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
+			if (Weapons) {
+				FString WeaponName = LoadGameInstance->CharStats.WeaponName;
+
+				if (Weapons->WeaponMap.Contains(WeaponName)) {
+					AWeapon* WeaponToEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+					WeaponToEquip->Equip(this);
+				}
+
+			}
+		}
+
 
 		SetMovementStatus(EMovementStatus::EMS_Normal);
 		GetMesh()->bPauseAnims = false;

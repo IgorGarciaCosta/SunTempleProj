@@ -27,7 +27,10 @@ struct FCharacterStats {
 	UPROPERTY(VisibleAnywhere)
 		FRotator Rot = FRotator();
 	UPROPERTY(VisibleAnywhere)
-		FString WeaponName = TEXT(" ");
+		FString WeaponName = TEXT("");
+
+	UPROPERTY(VisibleAnywhere)
+		FString LvlName = TEXT("");
 };
 /**
  * 
